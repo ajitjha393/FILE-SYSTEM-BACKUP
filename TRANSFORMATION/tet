@@ -1,0 +1,295 @@
+#include<stdio.h>
+#include<conio.h>
+#include<graphics.h>
+#include<math.h>
+
+int main()
+{
+int gd=DETECT,gm,i,j,k,choice,rchoice,schoice;
+int sx,sy,tx,ty,ysh,xsh;
+float thet,theta;
+int s[3][3],t[3][3],f[3][3],re[3][3],sh[3][3];
+float r[3][3],f1[3][3];
+int a[3][3];
+initgraph(&gd,&gm,"\\Bgi");
+printf("ENTER THE CO-ORDINATES OF THE TRIANGLE TO BE TRANSFORMED : \n");
+a[0][2] = 1;
+a[1][2] = 1;
+a[2][2] = 1;
+for(i=0;i<3;i++)
+{
+for(j=0;j<1;j++)
+{
+  printf("ENTER THE %d CO-ORDINATE : ",(i+1));
+  scanf("%d %d",&a[i][j],&a[i][j+1]);
+}
+}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d \t",a[i][j]);
+}
+printf("\n");
+}
+line(320,0,320,480);
+line(0,240,640,240);
+line(320+a[0][0],240-a[0][1],320+a[1][0],240-a[1][1]);
+line(320+a[0][0],240-a[0][1],320+a[2][0],240-a[2][1]);
+line(320+a[1][0],240-a[1][1],320+a[2][0],240-a[2][1]);
+printf("MENU \n 1.SCALE \n 2.TRANSLATE \n 3.ROTATE \n 4.REFLECT\n 5.SHEAR\n");
+printf("ENTER THE CHOICE : ");
+scanf("%d",&choice);
+switch(choice)
+{
+case 1:
+printf("ENTER THE X SCALING AND Y SCALING : ");
+scanf("%d %d",&sx,&sy);
+s[0][0] = sx;
+s[1][1] = sy;
+s[2][2] = 1;
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+if(i!=j)
+s[i][j] = 0;
+}
+}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j] = 0;
+for(k=0;k<3;k++)
+{
+f[i][j] =f[i][j] + (a[i][k]*s[k][j]);
+}
+}
+}
+printf("THE MATRIX AFTER SCALING IS : ");
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d\t",f[i][j]);
+}
+printf("\n");
+}
+break;
+case 2:
+printf("ENTER THE X TRANSLATION AND Y TRANSLATION : ");
+scanf("%d %d",&tx,&ty);
+t[2][0] = tx;
+t[2][1] = ty;
+t[2][2] = 1;
+for(i=0;i<2;i++)
+{
+for(j=0;j<3;j++)
+{
+if(i==j)
+t[i][j] = 1;
+else
+t[i][j] = 0;
+}
+}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j]=0;
+for(k=0;k<3;k++)
+{
+f[i][j]= f[i][j] + (a[i][k]*t[k][j]);
+}
+}
+}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d\t",f[i][j]);
+}
+printf("\n");
+}
+break;
+case 3:
+printf("ENTER THE ANGLE TO BE ROTATED : ");
+scanf("%f",&thet);
+theta = (3.14*thet)/180;
+r[0][0] = r[1][1] = cos(theta);
+r[0][1] = (sin(theta));
+r[0][2] = r[1][2] = r[2][1] = r[2][0] = 0;
+r[2][2] = 1;
+r[1][0] = -(sin(theta));
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f1[i][j] = 0;
+for(k=0;k<3;k++)
+{
+f1[i][j] = f1[i][j] + (a[i][k]*r[k][j]);
+}
+}
+}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%3f\t",f1[i][j]);
+}
+printf("\n");
+}
+break;
+
+case 4:
+printf("REFLECTION ABOUT WHICH AXIS :\n1. ABOUT X-AXIS\n2. ABOUT Y-AXIS\n3. ABOUT Y=X\n");
+printf("ENTER YOUR CHOICE : ");
+scanf("%d",&rchoice);
+switch(rchoice)
+{
+case 1:
+re[0][0]=re[2][2]=1;
+re[0][1]=re[0][2] = re[1][0] = re[1][2] = re[2][0] = re[2][1] =0;
+re[1][1] = -1;
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j]=0;
+for(k=0;k<3;k++)
+{
+f[i][j] = f[i][j] + (a[i][k]*re[k][j]);
+}}}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d\t",f[i][j]);
+}
+printf("\n");
+}
+break;
+
+case 2:
+re[1][1]=re[2][2]=1;
+re[0][1]=re[0][2]=re[1][0]=re[1][2]=re[2][0]=re[2][1]=0;
+re[0][0]=-1;
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j]=0;
+for(k=0;k<3;k++)
+{
+f[i][j]=f[i][j] + (a[i][k]*re[k][j]);
+}}}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d",f[i][j]);
+}
+printf("\n");
+}
+break;
+
+case 3:
+re[0][0] = re[0][2] = re[1][1] = re[1][2] = re[2][0] = re[2][1] = 0;
+re[0][1] = re[1][0] = re[2][2] = 1;
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j] = 0;
+for(k=0;k<3;k++)
+{
+f[i][j] = f[i][j] +(a[i][k]*re[k][j]);
+}}}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d\t",f[i][j]);
+}
+printf("\n");
+}
+break;
+}
+break;
+
+case 5:
+printf("SHEAR ABOUT WHICH AXIS :\n 1.ABOUT Y-AXIS\n 2. ABOUT X-AXIS\n");
+printf("ENTER THE CHOICE : ");
+scanf("%d",&schoice);
+switch(schoice)
+{
+case 1:
+printf("ENTER Y SHEAR : ");
+scanf("%d",&ysh);
+sh[0][0] = sh[1][1] = sh[2][2] = 1;
+sh[0][2] = sh[1][0] =sh[1][2] = sh[2][0] = sh[2][1] = 0;
+sh[0][1] = ysh;
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j] = 0;
+for(k=0;k<3;k++)
+{
+f[i][j] = f[i][j] + (a[i][k]*sh[k][j]);
+}}}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d\t",f[i][j]);
+}
+printf("\n");
+}
+break;
+
+case 2:
+printf("ENTER THE X SHEAR : ");
+scanf("%d",&xsh);
+sh[0][0] = sh[1][1]=sh[2][2] =1;
+sh[0][1] = sh[0][2] = sh[1][2] = sh[2][0] = sh[2][1] = 0;
+sh[1][0] = xsh;
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+f[i][j]=0;
+for(k=0;k<3;k++)
+{
+f[i][j] = f[i][j] + (a[i][k]*sh[k][j]);
+}}}
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("%d\t",f[i][j]);
+}
+printf("\n");
+}
+break;
+}
+break;
+}
+
+if(choice!=3)
+{
+line(320+f[0][0],240-f[0][1],320+f[1][0],240-f[1][1]);
+line(320+f[0][0],240-f[0][1],320+f[2][0],240-f[2][1]);
+line(320+f[1][0],240-f[1][1],320+f[2][0],240-f[2][1]);
+}
+else
+{
+line(320+f1[0][0],240-f1[0][1],320+f1[1][0],240-f1[1][1]);
+line(320+f1[1][0],240-f1[1][1],320+f1[2][0],240-f1[2][1]);
+line(320+f1[0][0],240-f1[0][1],320+f1[2][0],240-f1[2][1]);
+}
+getch();
+return 0;
+}
