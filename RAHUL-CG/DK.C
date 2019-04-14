@@ -1,0 +1,78 @@
+#include <graphics.h>
+#include <stdio.h>
+#include <conio.h>
+#include <math.h>
+void main()
+{
+    int gd = DETECT, gm;
+    float xc, yc, rx, ry, xi, yi, P1, P2;
+    initgraph(&gd, &gm, "C:\\tc\\BGI");
+
+    printf("Enter Center of circle: ");
+    scanf("%f %f", &xc, &yc);
+    printf("Enter Semi Major and Minor Axis: ");
+    scanf("%f %f", &rx, &ry);
+    xi = 0;
+    yi = ry;
+    //U forgot to print the symmetric point here and also not shifted
+    //putpixel(xi, yi, WHITE);
+    putpixel(xi + xc, yi + yc, WHITE);
+    putpixel(xi + xc, -yi + yc, WHITE);
+    P1 = (ry * ry) - ((rx * rx) * ry) + ((rx * rx) * 0.25);
+    do
+    {
+	if (P1 < 0)
+	{
+	    xi = xi + 1;
+	    putpixel(xi + xc, yi + yc, WHITE);
+	    putpixel(-xi + xc, yi + yc, WHITE);
+
+	    putpixel(xi + xc, -yi + yc, WHITE);
+	    putpixel(-xi + xc, -yi + yc, WHITE);
+	    P1 = P1 + (2 * (ry * ry) * xi) + (ry * ry);
+	}
+	else
+	{
+	    xi = xi + 1;
+	    yi = yi - 1;
+	    putpixel(xi + xc, yi + yc, WHITE);
+	    putpixel(-xi + xc, yi + yc, WHITE);
+	    putpixel(xi + xc, -yi + yc, WHITE);
+	    putpixel(-xi + xc, -yi + yc, WHITE);
+	    P1 = P1 + (2 * (ry * ry) * xi) + (ry * ry) - (2 * (rx * rx) * yi);
+	}
+
+    } while (((2 * (ry * ry) * xi)) <= (2 * (rx * rx) * yi));
+    //I replaces 1/2 as 0.5 because 1/2 = 0 in C
+    P2 = ((ry * ry) * (xi + 0.5) * (xi + 0.5)) + ((rx * rx) * (yi - 1) * (yi - 1)) - ((rx * rx) * (ry * ry));
+    do
+    {
+	if (P2 < 0)
+	{
+	    xi = xi + 1;
+	    yi = yi - 1;
+	    putpixel(xi + xc, yi + yc, WHITE);
+	    putpixel(-xi + xc, yi + yc, WHITE);
+	    putpixel(xi + xc, -yi + yc, WHITE);
+	    putpixel(-xi + xc, -yi + yc, WHITE);
+	    P2 = P2 + (2 * (ry * ry) * xi) + (rx * rx) - (2 * (rx * rx) * yi);
+	    //Error -> P2 = P2 + (2 * (ry * ry) * xi) + (rx * rx) - (2 * (rx * rx) * (yi * yi));
+	}
+	else
+	{
+	    yi = yi - 1;
+	    putpixel(xi + xc, yi + yc, WHITE);
+	    putpixel(-xi + xc, yi + yc, WHITE);
+	    putpixel(xi + xc, -yi + yc, WHITE);
+	    putpixel(-xi + xc, -yi + yc, WHITE);
+	    P2 = P2 + (rx * rx) - (2 * (rx * rx) * yi);
+	    //Error -> P2 = P2 + (2 * (ry * ry) * xi) + (rx * rx) - (2 * (rx * rx) * yi);
+	}
+
+    } while (yi >= 0);
+
+   //BHAI PRINT KARKE CLRSCR KAREGA TOH DIKHAGA KAISE
+    //clrscr();
+    getch();
+    closegraph();
+}
